@@ -1,8 +1,10 @@
 {
   "nombre": "así funciona",
   "formato": { "ancho": 1080, "alto": 1920, "fps": 30, "duracion_seg": [45, 60] },
-  "colores": { "fondo": "#0F1B2D", "acento": "#FFB703", "azul": "#4B5BFF", "turquesa": "#3DDBD9", "texto": "#FFFFFF" },
+  "colores": { "fondo": "#0F1B2D", "acento": "#FFB703", "azul": "#4B5BFF", "turquesa": "#3DDBD9", "rosa": "#FF4D6D", "texto": "#FFFFFF" },
   "tipografia": { "titulo": "Montserrat ExtraBold", "destacado": "Montserrat ExtraBold Italic" },
-  "voz": { "motor": "hyperframes tts (Kokoro, local)", "voz": "ef_dora", "idioma": "es" },
+  "voz": { "motor": "edge-tts", "voz": "es-MX-JorgeNeural", "rate": "-3%", "pitch": "-8Hz", "respaldo": "hyperframes tts (Kokoro, ef_dora)" },
+  "subtitulos": "frases de 1 a 3 palabras, una a la vez, palabra clave en amarillo cursiva con brillo",
+  "movimiento": "Three.js: objeto 3D por escena, camara con giro, halo y particulas",
   "estructura": ["gancho (0-2s)", "dato 1", "dato 2", "dato 3", "cierre con pregunta"]
 }

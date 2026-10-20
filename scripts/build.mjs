@@ -22,91 +22,129 @@ for (const f of ["montserrat-800.woff2", "montserrat-800-italic.woff2"]) {
 
 const W = 1080, H = 1920, PAUSA = 0.45;
 const limpio = (s) => s.replaceAll("*", "");
+const palabrasDe = (s) => limpio(s).trim().split(/\s+/).filter(Boolean);
 const dur = (file) =>
   parseFloat(execFileSync("ffprobe", ["-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", file]).toString());
 
-// 1) Audio por escena + duraciones
+// ---------- Voz ----------
+function tieneEdge() {
+  try { execFileSync("python3", ["-c", "import edge_tts"], { stdio: "ignore" }); return true; } catch { return false; }
+}
+function instalarEdge() {
+  if (tieneEdge()) return true;
+  for (const extra of [[], ["--break-system-packages"]]) {
+    try { execFileSync("python3", ["-m", "pip", "install", "-q", "edge-tts", ...extra], { stdio: "inherit" }); if (tieneEdge()) return true; } catch { /* siguiente intento */ }
+  }
+  return false;
+}
+const vozCfg = cfg.voz;
+let edgeOk = !fake && vozCfg.motor === "edge" ? instalarEdge() : false;
+if (!fake && vozCfg.motor === "edge" && !edgeOk) console.warn("AVISO: no se pudo instalar edge-tts; se usará la voz de respaldo.");
+let usoRespaldo = false;
+
+function kokoro(texto, wav) {
+  const r = vozCfg.respaldo;
+  execFileSync("npx", ["--yes", "hyperframes@0.8.181", "tts", texto, "-o", wav, "-v", r.id, "-l", r.idioma, "-s", String(r.velocidad)], { stdio: "inherit" });
+}
+
+function generarVoz(i, texto) {
+  const wav = join(out, "audio", `escena-${i + 1}.wav`);
+  if (fake) {
+    const n = palabrasDe(texto).length; const seg = Math.max(2, n / 2.7);
+    execFileSync("ffmpeg", ["-y", "-f", "lavfi", "-i", "anullsrc=r=24000:cl=mono", "-t", String(seg), wav], { stdio: "ignore" });
+    const pal = palabrasDe(texto).map((w, k) => ({ texto: w, inicio: (k * seg) / n, fin: ((k + 1) * seg) / n }));
+    return { wav, palabras: pal };
+  }
+  if (edgeOk) {
+    const mp3 = join(out, "audio", `escena-${i + 1}.mp3`); const js = join(out, "audio", `escena-${i + 1}.json`);
+    try {
+      execFileSync("python3", ["scripts/tts_edge.py", texto, vozCfg.voz, vozCfg.rate || "+0%", vozCfg.pitch || "+0Hz", mp3, js], { stdio: "inherit" });
+      execFileSync("ffmpeg", ["-y", "-i", mp3, "-ar", "24000", "-ac", "1", wav], { stdio: "ignore" });
+      const todas = JSON.parse(readFileSync(js, "utf8"));
+      return { wav, palabras: todas.filter((p) => /[\p{L}\p{N}]/u.test(p.texto)) };
+    } catch (err) {
+      console.warn(`AVISO: Edge TTS falló en la escena ${i + 1} (${err.message}). Se usa la voz de respaldo.`);
+    }
+  }
+  usoRespaldo = true;
+  kokoro(texto, wav);
+  return { wav, palabras: null };
+}
+
+// ---------- Audio por escena + duraciones ----------
 const escenas = [];
 let t = 0;
 cfg.escenas.forEach((e, i) => {
-  const wav = join(out, "audio", `escena-${i + 1}.wav`);
-  const texto = limpio(e.voz);
-  if (fake) {
-    const seg = Math.max(2, texto.split(/\s+/).length / 2.7);
-    execFileSync("ffmpeg", ["-y", "-f", "lavfi", "-i", "anullsrc=r=24000:cl=mono", "-t", String(seg), wav], { stdio: "ignore" });
-  } else {
-    execFileSync("npx", ["--yes", "hyperframes@0.8.181", "tts", texto, "-o", wav, "-v", cfg.voz.id, "-l", cfg.voz.idioma, "-s", String(cfg.voz.velocidad)], { stdio: "inherit" });
-  }
+  const { wav, palabras } = generarVoz(i, e.voz);
   const d = dur(wav);
-  escenas.push({ ...e, n: i + 1, start: +t.toFixed(3), voz_dur: +d.toFixed(3), dur: +(d + PAUSA).toFixed(3) });
+  escenas.push({ ...e, n: i + 1, start: +t.toFixed(3), voz_dur: +d.toFixed(3), dur: +(d + PAUSA).toFixed(3), palabras });
   t += d + PAUSA;
 });
 const total = +t.toFixed(3);
 console.log(`Duración total: ${total.toFixed(1)} s`);
+if (usoRespaldo) console.warn("AVISO: se usó la voz de RESPALDO (femenina) en al menos una escena.");
 if (total < 45 || total > 60) console.warn(`AVISO: la duración (${total.toFixed(1)} s) está fuera de 45-60 s`);
 
-// 2) HTML
+// ---------- Subtitulos cortos: una frase a la vez ----------
+function tiemposFrases(e) {
+  const fr = e.frases;
+  const nPal = fr.map((f) => palabrasDe(f).length);
+  const suma = nPal.reduce((a, b) => a + b, 0);
+  const nVoz = palabrasDe(e.voz).length;
+  let inicios;
+  if (e.palabras && e.palabras.length === nVoz && suma === nVoz) {
+    let idx = 0;
+    inicios = nPal.map((n) => { const s = e.palabras[idx].inicio; idx += n; return s; });
+  } else {
+    if (suma !== nVoz) console.warn(`AVISO escena ${e.n}: las frases (${suma} palabras) no cuadran con la voz (${nVoz}).`);
+    else if (e.palabras) console.warn(`AVISO escena ${e.n}: Edge devolvió ${e.palabras.length} palabras y la voz tiene ${nVoz}; se reparte por caracteres.`);
+    const pesos = fr.map((f) => limpio(f).length + 2); const total = pesos.reduce((a, b) => a + b, 0);
+    let acc = 0; inicios = pesos.map((p) => { const s = (acc / total) * e.voz_dur; acc += p; return s; });
+  }
+  return fr.map((f, k) => {
+    const ini = k === 0 ? 0 : Math.max(0, inicios[k] - 0.04);
+    const fin = k + 1 < fr.length ? Math.max(0, inicios[k + 1] - 0.04) : e.dur - 0.05;
+    return { texto: f, ini: +ini.toFixed(3), fin: +fin.toFixed(3) };
+  });
+}
 const resaltar = (s) => s.split(/(\*[^*]+\*)/).map((p) => (p.startsWith("*") ? `<em class="hl">${p.slice(1, -1)}</em>` : p)).join("");
+const tamano = (f) => { const n = limpio(f).length; return n <= 7 ? 190 : n <= 11 ? 160 : n <= 16 ? 128 : 104; };
 
-const visuales = {
-  prueba: () => `<div class="grid">${Array.from({ length: 20 }, (_, k) => `<i class="dot${[2, 7, 8, 13].includes(k) ? " on" : ""}"></i>`).join("")}</div><div class="etiqueta">GRUPO DE PRUEBA</div>`,
-  progreso: () => `<div class="barra"><b class="relleno"></b></div><div class="etiqueta">TIEMPO DE REPRODUCCIÓN</div>`,
-  avion: () => `<svg class="avion" viewBox="0 0 200 200" width="360" height="360"><path d="M10 100 L190 20 L140 180 L100 120 Z" fill="#3DDBD9"/><path d="M100 120 L190 20 L70 105 Z" fill="#FFFFFF" opacity=".85"/></svg><div class="etiqueta">ENVÍOS POR MENSAJE</div>`,
-  marca: () => `<div class="video"><span class="wm">OTRA APP</span><svg class="tacha" viewBox="0 0 100 100"><path d="M10 10 L90 90 M90 10 L10 90" stroke="#FF4D6D" stroke-width="9" stroke-linecap="round"/></svg></div><div class="etiqueta">CONTENIDO ORIGINAL</div>`,
-  telefonos: () => `<div class="tels">${["#4B5BFF", "#3DDBD9", "#FFB703", "#FF4D6D"].map((c) => `<div class="tel"><s style="background:${c};width:80%"></s><s style="background:${c};width:55%"></s><s style="background:${c};width:68%"></s></div>`).join("")}</div><div class="etiqueta">CADA FEED ES DISTINTO</div>`,
-  logo: () => `<div class="caja"><span class="asi">así</span></div><div class="func">funciona</div>`,
-};
+const frasesPorEscena = escenas.map((e) => tiemposFrases(e));
+const logoHtml = `<div class="logo3d"><div class="caja"><span class="asi">así</span></div><div class="func">funciona</div></div>`;
 
-const cap = (e) => {
-  const pal = e.voz.split(/\s+/);
-  const pesos = pal.map((w) => limpio(w).length + 2);
-  const suma = pesos.reduce((a, b) => a + b, 0);
-  let acc = 0;
-  let marca = false;
-  const html = pal.map((w, k) => {
-    const ini = (acc / suma) * e.voz_dur; acc += pesos[k];
-    let txt = w, cls = "w";
-    if (w.startsWith("*")) marca = true;
-    if (marca) cls += " hl";
-    if (w.endsWith("*") || /\*[^*]*\*/.test(w)) marca = false;
-    txt = limpio(txt);
-    return `<span class="${cls}" data-t="${ini.toFixed(2)}">${txt}</span>`;
-  }).join(" ");
-  return html;
-};
-
-const escenasHtml = escenas.map((e) => `
+const escenasHtml = escenas.map((e, si) => `
     <section id="s${e.n}" class="clip escena" data-start="${e.start}" data-duration="${e.dur}" data-track-index="1">
       ${e.n === 1 ? '<div class="flash"></div>' : ""}
-      <h1 class="titulo">${resaltar(e.titulo)}</h1>
-      <div class="visual">${visuales[e.visual]()}</div>
-      <p class="sub">${cap(e)}</p>
+      ${e.etiqueta ? `<div class="tag">${e.etiqueta}</div>` : ""}
+      ${e.visual === "cierre" ? logoHtml : ""}
+      <div class="frs">${frasesPorEscena[si].map((f, k) => `<div class="fr" id="s${e.n}f${k + 1}" style="font-size:${tamano(f.texto)}px">${resaltar(f.texto)}</div>`).join("")}</div>
     </section>
     <audio id="voz-${e.n}" data-start="${e.start}" data-duration="${e.voz_dur}" data-track-index="2" src="audio/escena-${e.n}.wav"></audio>`).join("\n");
 
+const datosJs = escenas.map((e, si) => ({ n: e.n, start: e.start, dur: e.dur, v: e.visual, tag: !!e.etiqueta, frases: frasesPorEscena[si].map((f, k) => ({ id: `s${e.n}f${k + 1}`, ini: f.ini, fin: f.fin })) }));
+
 const js = `
 const tl = gsap.timeline({ paused: true });
-const S = ${JSON.stringify(escenas.map((e) => ({ n: e.n, start: e.start, dur: e.dur, v: e.visual })))};
+const S = ${JSON.stringify(datosJs)};
 S.forEach((e) => {
   const q = (s) => "#s" + e.n + " " + s;
-  // Titulo: entra con un golpe de escala (visible desde el primer fotograma)
-  tl.fromTo(q(".titulo"), { scale: e.n === 1 ? 1.14 : 0.9, y: e.n === 1 ? 0 : 30 }, { scale: 1, y: 0, duration: 0.4, ease: "back.out(2)" }, e.start);
-  tl.fromTo(q(".visual"), { opacity: e.n === 1 ? 1 : 0, scale: 0.9 }, { opacity: 1, scale: 1, duration: 0.45, ease: "power3.out" }, e.start + 0.1);
-  // Subtitulos palabra por palabra
-  document.querySelectorAll(q(".w")).forEach((w) => {
-    tl.fromTo(w, { opacity: 0.18 }, { opacity: 1, duration: 0.12 }, e.start + parseFloat(w.dataset.t));
+  if (e.tag) tl.fromTo(q(".tag"), { autoAlpha: 0, y: -24 }, { autoAlpha: 1, y: 0, duration: 0.35, ease: "power3.out" }, e.start + 0.1);
+  e.frases.forEach((f, k) => {
+    const el = "#" + f.id; const ts = e.start + f.ini, te = e.start + f.fin;
+    if (e.n === 1 && k === 0) {
+      // Gancho: el texto ya es visible en el primer fotograma y entra con un golpe de escala
+      tl.fromTo(el, { autoAlpha: 1, scale: 1.3, rotationX: 0, y: 0, transformPerspective: 900 }, { scale: 1, duration: 0.25, ease: "power3.out" }, ts);
+    } else {
+      tl.fromTo(el, { autoAlpha: 0, scale: 0.55, rotationX: -65, y: 50, transformPerspective: 900 }, { autoAlpha: 1, scale: 1, rotationX: 0, y: 0, duration: 0.2, ease: "back.out(2.4)" }, ts);
+    }
+    tl.to(el, { autoAlpha: 0, scale: 1.12, y: -40, duration: 0.07, ease: "power2.in" }, Math.max(ts + 0.1, te - 0.07));
   });
-  // Visual especifico
-  if (e.v === "prueba") {
-    tl.fromTo(q(".dot"), { scale: 0.4, opacity: 0.4 }, { scale: 1, opacity: 1, duration: 0.3, stagger: 0.04, ease: "back.out(3)" }, e.start + 0.2);
-    tl.fromTo(q(".dot.on"), { scale: 1 }, { scale: 1.35, duration: 0.4, yoyo: true, repeat: 3, ease: "sine.inOut" }, e.start + 1.4);
+  if (e.v === "cierre") {
+    tl.fromTo(q(".caja"), { rotationY: -70, scale: 0.6, autoAlpha: 0, transformPerspective: 900 }, { rotationY: 0, scale: 1, autoAlpha: 1, duration: 0.7, ease: "back.out(1.8)" }, e.start + 0.25);
+    tl.fromTo(q(".func"), { autoAlpha: 0, y: 40 }, { autoAlpha: 1, y: 0, duration: 0.5, ease: "power3.out" }, e.start + 0.6);
+    tl.to(q(".logo3d"), { rotationY: 12, rotationX: -6, transformPerspective: 900, duration: 1.4, ease: "sine.inOut", yoyo: true, repeat: 3 }, e.start + 1.0);
   }
-  if (e.v === "progreso") tl.fromTo(q(".relleno"), { width: "4%" }, { width: "96%", duration: e.dur - 0.5, ease: "none" }, e.start + 0.3);
-  if (e.v === "avion") tl.fromTo(q(".avion"), { x: -420, y: 120, rotation: -15 }, { x: 0, y: 0, rotation: 0, duration: 0.9, ease: "power3.out" }, e.start + 0.2)
-    .to(q(".avion"), { y: -22, duration: 0.9, yoyo: true, repeat: 4, ease: "sine.inOut" }, e.start + 1.1);
-  if (e.v === "marca") tl.fromTo(q(".tacha"), { scale: 0, rotation: -40 }, { scale: 1, rotation: 0, duration: 0.5, ease: "back.out(3)" }, e.start + 1.6);
-  if (e.v === "telefonos") tl.fromTo(q(".tel"), { y: 80, opacity: 0 }, { y: 0, opacity: 1, duration: 0.45, stagger: 0.18, ease: "power3.out" }, e.start + 0.2);
-  if (e.v === "logo") tl.fromTo(q(".caja"), { scale: 0.7 }, { scale: 1, duration: 0.5, ease: "back.out(2.4)" }, e.start + 0.2);
 });
 // Destello amarillo en el segundo 1 (gancho)
 tl.fromTo("#s1 .flash", { opacity: 0 }, { opacity: 0.5, duration: 0.08 }, 1.0).to("#s1 .flash", { opacity: 0, duration: 0.35 }, 1.08);
@@ -120,32 +158,22 @@ const css = `
 @font-face { font-family: "Montserrat"; font-weight: 800; font-style: italic; src: url("fonts/montserrat-800-italic.woff2") format("woff2"); }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html, body { width: ${W}px; height: ${H}px; overflow: hidden; background: #0F1B2D; font-family: "Montserrat", sans-serif; font-weight: 800; }
-#root { position: relative; width: ${W}px; height: ${H}px; background: radial-gradient(circle at 50% 38%, #1B2F52 0%, #0F1B2D 62%); color: #fff; }
-.escena { position: absolute; inset: 0; }
+#root { position: relative; width: ${W}px; height: ${H}px; background: radial-gradient(circle at 50% 42%, #1B2F52 0%, #0F1B2D 62%); color: #fff; }
+#gl { position: absolute; inset: 0; width: ${W}px; height: ${H}px; z-index: 1; }
+.escena { position: absolute; inset: 0; z-index: 2; }
 .flash { position: absolute; inset: 0; background: #FFB703; opacity: 0; z-index: 5; }
-.titulo { position: absolute; left: 90px; right: 140px; top: 250px; font-size: 96px; line-height: 1.08; letter-spacing: -1px; text-shadow: 0 8px 0 rgba(0,0,0,.35); }
-.hl, .titulo .hl { color: #FFB703; font-style: italic; text-shadow: 0 0 26px rgba(255,183,3,.8), 0 7px 0 rgba(0,0,0,.4); }
-.visual { position: absolute; left: 0; right: 0; top: 760px; height: 520px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 36px; }
-.etiqueta { font-size: 38px; letter-spacing: 6px; color: #3DDBD9; text-shadow: 0 0 18px rgba(61,219,217,.55); }
-.sub { position: absolute; left: 100px; right: 150px; top: 1340px; font-size: 54px; line-height: 1.22; font-style: italic; text-shadow: 0 5px 0 rgba(0,0,0,.45); }
-.w { opacity: .18; }
-.grid { display: grid; grid-template-columns: repeat(5, 90px); gap: 34px; }
-.dot { width: 90px; height: 90px; border-radius: 50%; background: #2A3F66; }
-.dot.on { background: #3DDBD9; box-shadow: 0 0 30px rgba(61,219,217,.8); }
-.barra { width: 760px; height: 64px; border-radius: 32px; background: #1E2F4A; overflow: hidden; border: 4px solid #4B5BFF; }
-.relleno { display: block; height: 100%; width: 4%; background: #FFB703; box-shadow: 0 0 30px rgba(255,183,3,.8); border-radius: 32px; }
-.video { position: relative; width: 420px; height: 300px; border-radius: 36px; background: #1E2F4A; border: 5px solid #4B5BFF; }
-.wm { position: absolute; right: 22px; bottom: 18px; font-size: 34px; color: #fff; opacity: .8; }
-.tacha { position: absolute; inset: 40px; width: 340px; height: 220px; }
-.tels { display: flex; gap: 28px; }
-.tel { width: 190px; height: 330px; border-radius: 34px; border: 5px solid #4B5BFF; background: #14233D; padding: 36px 22px; display: flex; flex-direction: column; gap: 22px; }
-.tel s { display: block; height: 26px; border-radius: 13px; text-decoration: none; }
+.tag { position: absolute; left: 0; right: 0; top: 215px; text-align: center; font-size: 40px; letter-spacing: 7px; color: #3DDBD9; text-shadow: 0 0 20px rgba(61,219,217,.6); visibility: hidden; }
+.frs { position: absolute; left: 70px; right: 70px; top: 290px; height: 480px; }
+.fr { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; text-align: center; line-height: 1.02; letter-spacing: -2px; text-shadow: 0 10px 0 rgba(0,0,0,.4); opacity: 0; visibility: hidden; }
+.fr .hl { color: #FFB703; font-style: italic; margin: 0 .12em; text-shadow: 0 0 34px rgba(255,183,3,.9), 0 0 8px rgba(255,183,3,.6), 0 9px 0 rgba(0,0,0,.4); }
+.logo3d { position: absolute; left: 0; right: 0; top: 880px; display: flex; flex-direction: column; align-items: center; gap: 28px; }
 .caja { position: relative; width: 620px; height: 330px; border: 10px solid #4B5BFF; background: rgba(75,91,255,.18); display: flex; align-items: center; justify-content: center; }
-.caja::before, .caja::after { content: ""; position: absolute; width: 44px; height: 44px; border-radius: 50%; background: #4B5BFF; left: -27px; top: -27px; box-shadow: 590px 0 #4B5BFF, 0 300px #4B5BFF, 590px 300px #4B5BFF; }
-.caja::after { display: none; }
+.caja::before { content: ""; position: absolute; width: 44px; height: 44px; border-radius: 50%; background: #4B5BFF; left: -27px; top: -27px; box-shadow: 590px 0 #4B5BFF, 0 300px #4B5BFF, 590px 300px #4B5BFF; }
 .asi { font-size: 250px; letter-spacing: -4px; text-shadow: 0 8px 0 rgba(0,0,0,.35); }
 .func { font-size: 100px; font-style: italic; color: #FFB703; text-shadow: 0 0 26px rgba(255,183,3,.8); }
 `;
+
+const modulo3d = readFileSync("scripts/escena3d.js", "utf8").replace("/*ESCENAS*/[]", JSON.stringify(datosJs.map((e) => ({ n: e.n, start: e.start, dur: e.dur, v: e.v }))));
 
 const html = `<!doctype html>
 <html lang="es">
@@ -157,9 +185,13 @@ const html = `<!doctype html>
 </head>
 <body>
 <div id="root" data-composition-id="main" data-start="0" data-duration="${total}" data-width="${W}" data-height="${H}">
+<canvas id="gl" width="${W}" height="${H}"></canvas>
 ${escenasHtml}
 </div>
 <script>${js}</script>
+<script type="module">
+${modulo3d}
+</script>
 </body>
 </html>
 `;
