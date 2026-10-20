@@ -1,43 +1,40 @@
 # 01 · Cómo funciona el algoritmo de Instagram Reels
 
 **Duración objetivo:** 45–60 s · **Formato:** 9:16
+Texto exacto de cada escena: `escenas/01-algoritmo-instagram/escenas.json`.
 
 ## Gancho (0-2 s)
-- Texto en pantalla: "Tu reel muere en 3 segundos ⚡"
-- Voz: "Instagram decide en segundos si tu video sigue o desaparece."
-- Efecto: destello amarillo en el segundo 1. Palabras "muere" y "3 segundos" resaltadas.
+- Pantalla: "Tu reel se *juega todo* con unas pocas personas"
+- Voz: "Tu reel se juega todo con unas pocas personas. Instagram primero lo prueba con un grupo pequeño y ahí decide si lo expande."
+- Efecto: golpe de escala en el primer fotograma y destello amarillo en el segundo 1.
+- Cambio respecto al borrador: se quitó "muere en 3 segundos" porque ninguna fuente respalda esa cifra.
 
-## Dato 1 · Tiempo de reproducción (2-15 s)
-- Voz: "Lo primero que mide es cuánto tiempo la gente lo mira, no cuántas vistas tiene."
-- Visual: barra de reproducción que se llena, con un tramo marcado.
-- Fuente: Instagram y análisis de la industria (ver "Fuentes" abajo).
+## Dato 1 · Tiempo de reproducción
+- Voz: "En esa prueba mide el tiempo de reproducción. No importan tanto las vistas, sino cuánto tiempo se quedan mirándolo."
+- Visual: barra que se llena.
 
-## Dato 2 · Envíos por mensaje (15-28 s)
-- Voz: "Enviarle un reel a alguien por mensaje vale más que un like."
-- Visual: ícono de avión de papel que sale de un teléfono.
-- Fuente: análisis de la industria. Verificar antes de publicar.
+## Dato 2 · Envíos por mensaje
+- Voz: "Luego cuentan los envíos por mensaje. Que alguien mande tu reel a un amigo suele pesar más que un like."
+- Visual: avión de papel.
+- Verificar en fuente oficial antes de publicar (la cita atribuida a Adam Mosseri viene de blogs).
 
-## Dato 3 · Originalidad (28-40 s)
-- Voz: "Si tu video tiene la marca de agua de otra app, Instagram lo muestra a menos gente."
-- Visual: marca de agua tachada en pantalla.
-- Fuente: Instagram (política de contenido original) y análisis de la industria.
+## Dato 3 · Originalidad
+- Voz: "También premia la originalidad. Si traes la marca de agua de otra app, Instagram lo muestra a menos gente."
+- Visual: marca de agua tachada.
 
-## Dato 4 · Cada persona ve algo distinto (40-50 s)
-- Voz: "Y cada persona ve un feed diferente, según lo que mira y con quién interactúa."
+## Dato 4 · Cada quien ve algo distinto
+- Voz: "Y no hay un solo algoritmo. Reels, Explorar y el inicio usan sistemas separados, y cada quien ve un feed distinto."
 - Visual: cuatro teléfonos con feeds distintos.
-- Fuente: Instagram.
 
-## Cierre (50-60 s)
-- Voz: "¿Cuál de estos te sorprendió más? Cuéntamelo en comentarios."
-- Texto final: "así funciona" + logo caja.
-
-## Palabras destacadas (brillo + sombra)
-muere · 3 segundos · cuánto tiempo · vale más · original · diferente · sorprendió
+## Cierre
+- Voz: "Engancha rápido, haz que lo compartan y sé original. ¿Cuál te sorprendió más? Cuéntamelo en comentarios."
+- Pantalla final: logo "así funciona" en caja.
 
 ## Fuentes
-- Instagram, comunicados oficiales sobre Reels y "Tu algoritmo" (control de intereses).
-- Análisis de terceros (Adaptly, StackInfluence, SocialPilot, Tiendanube). Son fuentes secundarias: confirmar las cifras y citas (por ejemplo, la de DM) en comunicados oficiales antes de publicar.
+- Adaptly (adaptlypost.com), "Cinco señales lo deciden: cómo funciona el algoritmo de Instagram Reels 2026": tiempo de reproducción, envíos por mensaje, sistemas de clasificación separados por superficie.
+- SocialPilot (socialpilot.co), "Instagram Reels Algorithm 2026": fase de prueba inicial, envíos por mensaje frente a likes para llegar a no seguidores, penalización a contenido no original.
+- Son fuentes secundarias. Confirmar en comunicados oficiales de Instagram antes de publicar.
 
 ## Notas de verificación
-- Las señales (tiempo de reproducción, envíos, originalidad, intereses) aparecen en varias fuentes. Las citas directas de personas se deben confirmar.
 - Los algoritmos cambian. Revisar de nuevo antes de publicar.
+- Pendiente: confirmar la duración final con la voz real (el script avisa si queda fuera de 45-60 s).

@@ -1,0 +1,81 @@
+name: Renderizar video
+
+on:
+  workflow_dispatch:
+    inputs:
+      video:
+        description: "Carpeta del video dentro de escenas/ (ej. 01-algoritmo-instagram)"
+        required: true
+        default: "01-algoritmo-instagram"
+      calidad:
+        description: "draft = rápido para probar, looks = calidad normal"
+        required: true
+        default: "draft"
+        type: choice
+        options:
+          - draft
+          - looks
+
+permissions:
+  contents: read
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      VIDEO: ${{ inputs.video }}
+      CALIDAD: ${{ inputs.calidad }}
+    steps:
+      - name: Validar nombre del video
+        run: |
+          if [[ ! "$VIDEO" =~ ^[a-z0-9-]+$ ]]; then
+            echo "Nombre de video inválido: usa solo minúsculas, números y guiones."
+            exit 1
+          fi
+
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Instalar FFmpeg y espeak-ng
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg espeak-ng
+
+      - name: Voz local gratuita (Kokoro)
+        run: pip install kokoro-onnx soundfile
+
+      - name: Fuentes Montserrat (ExtraBold y cursiva)
+        run: |
+          npm install --no-save @fontsource/montserrat@5
+          mkdir -p fonts-cache
+          cp node_modules/@fontsource/montserrat/files/montserrat-latin-800-normal.woff2 fonts-cache/montserrat-800.woff2
+          cp node_modules/@fontsource/montserrat/files/montserrat-latin-800-italic.woff2 fonts-cache/montserrat-800-italic.woff2
+
+      - name: Navegador para render
+        run: npx --yes hyperframes@0.8.181 browser ensure
+
+      - name: Construir el video (voz y composición)
+        run: node scripts/build.mjs "escenas/$VIDEO"
+
+      - name: Validar composición
+        run: npx --yes hyperframes@0.8.181 lint "build/$VIDEO"
+
+      - name: Renderizar MP4
+        run: |
+          mkdir -p renders
+          npx --yes hyperframes@0.8.181 render "build/$VIDEO" -o "renders/$VIDEO.mp4" -q "$CALIDAD"
+
+      - name: Subir el video
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ inputs.video }}
+          path: renders/${{ inputs.video }}.mp4
+          retention-days: 14
