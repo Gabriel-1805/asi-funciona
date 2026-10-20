@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1080">
+  <rect width="1080" height="1080" fill="#0F1B2D"/>
+  <rect x="200" y="340" width="680" height="380" fill="#4B5BFF" opacity="0.18"/>
+  <rect x="200" y="340" width="680" height="380" fill="none" stroke="#4B5BFF" stroke-width="10"/>
+  <g fill="#4B5BFF">
+    <circle cx="200" cy="340" r="22"/><circle cx="880" cy="340" r="22"/>
+    <circle cx="200" cy="720" r="22"/><circle cx="880" cy="720" r="22"/>
+  </g>
+  <text x="540" y="610" text-anchor="middle" font-family="Montserrat, 'Arial Black', sans-serif" font-weight="800" font-size="300" fill="#FFFFFF">así</text>
+  <text x="540" y="840" text-anchor="middle" font-family="Montserrat, 'Arial Black', sans-serif" font-weight="800" font-style="italic" font-size="110" fill="#FFB703">funciona</text>
+</svg>
