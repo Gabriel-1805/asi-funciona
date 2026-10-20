@@ -1,0 +1,8 @@
+{
+  "nombre": "así funciona",
+  "formato": { "ancho": 1080, "alto": 1920, "fps": 30, "duracion_seg": [45, 60] },
+  "colores": { "fondo": "#0F1B2D", "acento": "#FFB703", "azul": "#4B5BFF", "turquesa": "#3DDBD9", "texto": "#FFFFFF" },
+  "tipografia": { "titulo": "Montserrat ExtraBold", "subtitulo": "Montserrat ExtraBold Italic" },
+  "voz": { "motor": "edge-tts", "voz_sugerida": "es-MX-DaliaNeural" },
+  "estructura": ["gancho (0-3s)", "dato 1", "dato 2", "dato 3", "cierre con pregunta"]
+}
