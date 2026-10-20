@@ -1,0 +1,36 @@
+{
+  "id": "01-algoritmo-instagram",
+  "voz": { "id": "ef_dora", "idioma": "es", "velocidad": 1.0 },
+  "escenas": [
+    {
+      "visual": "prueba",
+      "titulo": "Tu reel se *juega todo* con unas pocas personas",
+      "voz": "Tu reel se *juega todo* con unas pocas personas. Instagram primero lo prueba con un grupo pequeño y ahí decide si lo expande."
+    },
+    {
+      "visual": "progreso",
+      "titulo": "Primero mide el *tiempo* que lo ves",
+      "voz": "En esa prueba mide el *tiempo* de reproducción. No importan tanto las vistas, sino cuánto tiempo se quedan mirándolo."
+    },
+    {
+      "visual": "avion",
+      "titulo": "Enviarlo por mensaje *pesa más* que un like",
+      "voz": "Luego cuentan los *envíos por mensaje*. Que alguien mande tu reel a un amigo suele pesar más que un like."
+    },
+    {
+      "visual": "marca",
+      "titulo": "La marca de agua de otra app te *resta alcance*",
+      "voz": "También premia la *originalidad*. Si traes la marca de agua de otra app, Instagram lo muestra a menos gente."
+    },
+    {
+      "visual": "telefonos",
+      "titulo": "Cada quien ve un feed *diferente*",
+      "voz": "Y no hay un solo algoritmo. Reels, Explorar y el inicio usan sistemas separados, y cada quien ve un feed *distinto*."
+    },
+    {
+      "visual": "logo",
+      "titulo": "¿Cuál te *sorprendió* más?",
+      "voz": "Engancha rápido, haz que lo compartan y sé original. ¿Cuál te *sorprendió* más? Cuéntamelo en comentarios."
+    }
+  ]
+}
