@@ -17,7 +17,7 @@ Reels de curiosidades del día a día: educativos y divertidos, con ilustración
 - Nunca cifras ni plazos sin fuente.
 
 ## 4. Gramática de los subtítulos
-- Segmentos de 2 a 4 palabras (máximo 6), aproximadamente uno por segundo.
+- Segmentos de 2 a 4 palabras (máximo 6), aproximadamente uno por segundo. Se permite una sola palabra, para dar énfasis, en hasta el 20 % de las frases.
 - Una frase a la vez: la nueva reemplaza a la anterior.
 - Dentro de un segmento, las palabras pueden aparecer una tras otra: la actual en blanco y negrita, las anteriores en gris.
 - La palabra clave se destaca en amarillo, cursiva y con brillo (marca propia). La caja azul de selección de la referencia se puede usar en una palabra por escena.
@@ -58,5 +58,23 @@ Recursos: contraste «X… pero Y», pregunta retórica, tres elementos y dos pu
 - Los videos de referencia no se suben al repo público. Aquí solo van los análisis.
 
 ## 11. Estado actual
-- El video 01 usa Three.js en las seis escenas (versión anterior a estas reglas).
-- Objetivo: pasar el video 01 y los siguientes a 2D según este documento.
+- Desde ahora todos los videos nuevos usan el estilo 2D de estas reglas. El video 01 queda descartado como modelo.
+- El motor actual (scripts/build.mjs y scripts/escena3d.js) es 3D y muestra una frase a la vez. El primer video nuevo incluye construir el motor 2D (SVG y GSAP, subtítulos acumulativos). Lo hace el animador y se valida con el render de prueba.
+
+## 12. Rúbrica de calidad (v2)
+Origen: la armó Claude a partir de las reglas del usuario y del análisis de las dos referencias (carpeta referencias/). No proviene de un estudio externo. El umbral de 8 lo eligió Claude y lo aprobó el usuario. Los valores numéricos son provisionales: se recalibran después del primer video con el estilo nuevo.
+
+Puntuación: 1 punto por criterio cumplido y 0 si no. Para publicar hacen falta 8 de 10 como mínimo. Si no se llega, se corrige y se mide otra vez (máximo 3 vueltas). Si después de 3 vueltas sigue por debajo de 8, se avisa al usuario con la lista de fallos y él decide. El coordinador suma los puntos y los anota en revision/registro/<id>.md.
+
+| # | Criterio | Prueba (sí/no o número) | Quién la aplica |
+|---|---|---|---|
+| 1 | Gancho en 2 s | En el fotograma 0 hay texto legible. Entre el fotograma 0 y el 15 cambian más del 2 % de los píxeles (hay movimiento). En el segundo 1 hay un destello o cambio de color. | Revisor técnico |
+| 2 | Subtítulos cortos | Cada frase tiene de 2 a 4 palabras (una sola palabra solo en hasta el 20 % de las frases). Nunca hay dos frases visibles a la vez. | Revisor técnico |
+| 3 | Ritmo | Palabras de la voz ÷ duración del audio de voz = entre 2,2 y 2,6. | Verificador |
+| 4 | Duración | El MP4 final dura entre 45,0 y 60,0 s. | Verificador |
+| 5 | Fuentes | Cada dato que dice la voz tiene al menos 3 fuentes con enlace y fecha en investigacion/<id>.md. | Verificador |
+| 6 | Elemento visual por frase | En el storyboard, cada frase tiene un elemento asignado: contador, etiqueta técnica, ícono, maqueta de interfaz, cuadrícula o dibujo. Ninguna frase queda sin elemento. | Animador, al recibir el storyboard |
+| 7 | Cortes | Con ffmpeg y el filtro de escena a 0,25 se detectan 3 cortes o menos. | Revisor técnico |
+| 8 | Sin errores de texto | En los fotogramas (uno por segundo y uno por cambio de frase), ningún texto queda a menos de 60 px del borde, ni se solapa con otro texto o elemento, ni se corta. | Revisor técnico |
+| 9 | Voz sin huecos | Con silencedetect a -32 dB y 0,8 s, no hay ningún silencio dentro de la narración (se ignoran los últimos 0,5 s). | Revisor técnico |
+| 10 | Cierre | Las dos últimas frases tienen tres negaciones seguidas (sin X, sin Y y sin Z) o una pregunta que invita a comentar. | Revisor técnico |
