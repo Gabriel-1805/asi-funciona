@@ -15,19 +15,19 @@ Alternativas: «El aire parece invisible. Pero pinta todo el cielo de azul.» / 
 ## Narración
 La luz del Sol parece blanca. Entonces, ¿por qué el cielo no se ve blanco?
 
-La luz blanca mezcla todos los colores visibles. Cada color tiene su propia longitud de onda: la roja es larga y la azul, corta.
+La luz blanca mezcla colores visibles. Cada color tiene una longitud de onda: la roja es larga y la azul, corta.
 
-Al entrar en la atmósfera, la luz encuentra moléculas diminutas de nitrógeno y oxígeno. Estas la dispersan en muchas direcciones.
+En la atmósfera, la luz encuentra moléculas de nitrógeno y oxígeno. Estas la dispersan en muchas direcciones.
 
 Este fenómeno se llama dispersión de Rayleigh. Las ondas cortas, azules y violetas, se dispersan mucho más que las rojas.
 
 ¿Por qué no vemos el cielo violeta? Nuestros ojos son más sensibles al azul, y el Sol emite más luz azul que violeta.
 
-Cerca del horizonte, la luz atraviesa más atmósfera y el azul se dispersa varias veces, por eso el cielo se ve más pálido. No es un filtro: son moléculas desviando luz. ¿Qué otra curiosidad quieres que expliquemos?
+Cerca del horizonte, la luz atraviesa más atmósfera y el azul se dispersa varias veces: por eso se ve pálido. ¿Qué curiosidad quieres que expliquemos después?
 
 ## Ritmo esperado
-- 139 palabras aproximadas en la narración, más pausas entre escenas.
-- Objetivo: 45–60 s a 2,2–2,6 palabras por segundo según Reglas.md.
+- 122 palabras aproximadas en la narración, más pausas entre escenas.
+- Objetivo calculado: 49–58 s contando cinco pausas de 0,45 s a 2,2–2,6 palabras por segundo, según Reglas.md. La medición real se hará con el audio.
 - La duración definitiva debe medirse con los archivos de voz generados; no se asume que el cálculo sustituya esa medición.
 
 ## Storyboard
