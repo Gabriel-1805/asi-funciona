@@ -159,6 +159,7 @@ const css = `
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html, body { width: ${W}px; height: ${H}px; overflow: hidden; background: #0F1B2D; font-family: "Montserrat", sans-serif; font-weight: 800; }
 #root { position: relative; width: ${W}px; height: ${H}px; background: radial-gradient(circle at 50% 42%, #1B2F52 0%, #0F1B2D 62%); color: #fff; }
+#art { position: absolute; inset: 0; width: ${W}px; height: ${H}px; z-index: 1; pointer-events: none; }
 #gl { position: absolute; inset: 0; width: ${W}px; height: ${H}px; z-index: 1; }
 .escena { position: absolute; inset: 0; z-index: 2; }
 .flash { position: absolute; inset: 0; background: #FFB703; opacity: 0; z-index: 5; }
@@ -173,7 +174,15 @@ html, body { width: ${W}px; height: ${H}px; overflow: hidden; background: #0F1B2
 .func { font-size: 100px; font-style: italic; color: #FFB703; text-shadow: 0 0 26px rgba(255,183,3,.8); }
 `;
 
-const modulo3d = readFileSync("scripts/escena3d.js", "utf8").replace("/*ESCENAS*/[]", JSON.stringify(datosJs.map((e) => ({ n: e.n, start: e.start, dur: e.dur, v: e.v }))));
+const escenasParaVisual = JSON.stringify(datosJs.map((e) => ({ n: e.n, start: e.start, dur: e.dur, v: e.v })));
+const modulo3d = readFileSync("scripts/escena3d.js", "utf8").replace("/*ESCENAS*/[]", escenasParaVisual);
+const usaCielo2d = cfg.id === "03-por-que-cielo-azul";
+const moduloVisual = usaCielo2d
+  ? readFileSync("scripts/escena-cielo.js", "utf8").replace("/*ESCENAS*/[]", escenasParaVisual)
+  : modulo3d;
+const visualLayer = usaCielo2d
+  ? readFileSync("scripts/escena-cielo.svg", "utf8")
+  : `${visualLayer}`;
 
 const html = `<!doctype html>
 <html lang="es">
@@ -190,7 +199,7 @@ ${escenasHtml}
 </div>
 <script>${js}</script>
 <script type="module">
-${modulo3d}
+${moduloVisual}
 </script>
 </body>
 </html>
