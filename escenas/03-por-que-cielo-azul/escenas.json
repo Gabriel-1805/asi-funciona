@@ -28,28 +28,28 @@
     },
     {
       "visual": "espectro",
-      "voz": "La luz blanca mezcla todos los colores visibles. Cada color tiene su propia longitud de onda: la roja es larga y la azul, corta.",
+      "voz": "La luz blanca mezcla colores visibles. Cada color tiene una longitud de onda: la roja es larga y la azul, corta.",
       "frases": [
         "La luz blanca",
-        "mezcla todos los",
-        "colores visibles.",
+        "mezcla colores",
+        "visibles.",
         "Cada color tiene",
-        "su propia longitud",
-        "de onda: la",
-        "roja es *larga*",
-        "y la azul,",
-        "*corta*."
+        "una longitud",
+        "de onda:",
+        "la roja es",
+        "*larga* y la",
+        "azul, *corta*."
       ]
     },
     {
       "visual": "atmosfera",
-      "voz": "Al entrar en la atmósfera, la luz encuentra moléculas diminutas de nitrógeno y oxígeno. Estas la dispersan en muchas direcciones.",
+      "voz": "En la atmósfera, la luz encuentra moléculas de nitrógeno y oxígeno. Estas la dispersan en muchas direcciones.",
       "frases": [
-        "Al entrar en",
-        "la atmósfera,",
+        "En la",
+        "atmósfera,",
         "la luz encuentra",
-        "moléculas diminutas",
-        "de nitrógeno y",
+        "moléculas de",
+        "nitrógeno y",
         "oxígeno.",
         "Estas la dispersan",
         "en muchas",
@@ -88,7 +88,7 @@
     },
     {
       "visual": "horizonte",
-      "voz": "Cerca del horizonte, la luz atraviesa más atmósfera y el azul se dispersa varias veces, por eso el cielo se ve más pálido. No es un filtro: son moléculas desviando luz. ¿Qué otra curiosidad quieres que expliquemos?",
+      "voz": "Cerca del horizonte, la luz atraviesa más atmósfera y el azul se dispersa varias veces: por eso se ve pálido. ¿Qué curiosidad quieres que expliquemos después?",
       "frases": [
         "Cerca del",
         "*horizonte*,",
@@ -96,17 +96,13 @@
         "más atmósfera",
         "y el azul",
         "se dispersa",
-        "varias veces,",
-        "por eso el",
-        "cielo se ve",
-        "más pálido.",
-        "No es un",
-        "*filtro*:",
-        "son moléculas",
-        "desviando luz.",
-        "¿Qué otra",
-        "curiosidad quieres",
-        "que expliquemos?"
+        "varias veces:",
+        "por eso",
+        "se ve *pálido*.",
+        "¿Qué curiosidad",
+        "quieres que",
+        "expliquemos",
+        "después?"
       ]
     }
   ]
