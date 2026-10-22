@@ -1,0 +1,55 @@
+{
+  "id": "02-codigo-qr",
+  "voz": {
+    "motor": "edge",
+    "voz": "es-MX-JorgeNeural",
+    "rate": "-3%",
+    "pitch": "-8Hz",
+    "respaldo": { "motor": "kokoro", "id": "ef_dora", "idioma": "es", "velocidad": 1.0 }
+  },
+  "escenas": [
+    {
+      "visual": "qr-gancho",
+      "voz": "Todos los QR parecen iguales. Por dentro, casi nunca lo son.",
+      "frases": ["Todos los QR", "parecen iguales.", "Por dentro,", "*casi nunca*", "lo son."]
+    },
+    {
+      "visual": "historia",
+      "voz": "Nacieron en 1994, en una empresa del grupo Toyota. Su inventor se inspiró en un tablero de Go.",
+      "frases": ["Nacieron en *1994*,", "en una empresa", "del grupo Toyota.", "Su inventor", "se inspiró en", "un tablero de *Go*."]
+    },
+    {
+      "visual": "cuadrados",
+      "voz": "Los QR estándar tienen tres cuadrados en las esquinas. Así el lector sabe dónde está el código y cómo girarlo.",
+      "frases": ["Los QR estándar", "tienen *tres cuadrados*", "en las esquinas.", "Así el lector", "sabe dónde está", "el código", "y cómo girarlo."]
+    },
+    {
+      "visual": "giro",
+      "voz": "Entonces, ¿qué los hace distintos? Tres cosas.",
+      "frases": ["Entonces, ¿qué", "los hace distintos?", "*Tres cosas.*"]
+    },
+    {
+      "visual": "tamano",
+      "etiqueta": "VERSIÓN",
+      "voz": "Primero, el tamaño: de 21 por 21 módulos hasta 177 por 177. La más grande guarda más de siete mil dígitos.",
+      "frases": ["Primero, el *tamaño*:", "de 21 por 21", "módulos hasta", "177 por 177.", "La más grande", "guarda más de", "*siete mil* dígitos."]
+    },
+    {
+      "visual": "correccion",
+      "etiqueta": "CORRECCIÓN",
+      "voz": "Segundo, la corrección de errores: cuatro niveles que recuperan hasta cerca del 30 por ciento de los datos. Más corrección, código más grande.",
+      "frases": ["Segundo, la *corrección*", "de errores:", "cuatro niveles", "que recuperan", "hasta cerca del", "*30 por ciento*", "de los datos.", "Más corrección,", "código más grande."]
+    },
+    {
+      "visual": "mascara",
+      "etiqueta": "MÁSCARA",
+      "voz": "Tercero, la máscara: el generador prueba ocho patrones y elige el menos ambiguo.",
+      "frases": ["Tercero, la *máscara*:", "el generador", "prueba *ocho patrones*", "y elige el", "menos ambiguo."]
+    },
+    {
+      "visual": "cierre",
+      "voz": "Mismos cuadrados, distinto interior. ¿Cuál de estos datos no sabías? Cuéntamelo en los comentarios.",
+      "frases": ["Mismos cuadrados,", "distinto *interior*.", "¿Cuál de estos", "datos no sabías?", "Cuéntamelo en", "los *comentarios*."]
+    }
+  ]
+}
