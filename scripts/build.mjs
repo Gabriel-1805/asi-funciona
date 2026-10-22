@@ -182,7 +182,7 @@ const moduloVisual = usaCielo2d
   : modulo3d;
 const visualLayer = usaCielo2d
   ? readFileSync("scripts/escena-cielo.svg", "utf8")
-  : `${visualLayer}`;
+  : `<canvas id="gl" width="${W}" height="${H}"></canvas>`;
 
 const html = `<!doctype html>
 <html lang="es">
@@ -194,7 +194,7 @@ const html = `<!doctype html>
 </head>
 <body>
 <div id="root" data-composition-id="main" data-start="0" data-duration="${total}" data-width="${W}" data-height="${H}">
-<canvas id="gl" width="${W}" height="${H}"></canvas>
+${visualLayer}
 ${escenasHtml}
 </div>
 <script>${js}</script>
