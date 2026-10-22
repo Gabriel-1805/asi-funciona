@@ -1,0 +1,77 @@
+<svg id="art" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1920" aria-label="Ilustraciones científicas del cielo azul" role="img">
+  <defs>
+    <radialGradient id="sunGlow"><stop offset="0" stop-color="#FFF7D6" stop-opacity="1"/><stop offset=".35" stop-color="#FFB703" stop-opacity=".5"/><stop offset="1" stop-color="#FFB703" stop-opacity="0"/></radialGradient>
+    <linearGradient id="whiteBeam"><stop stop-color="#FFFFFF" stop-opacity=".05"/><stop offset=".5" stop-color="#FFFFFF" stop-opacity=".95"/><stop offset="1" stop-color="#FFFFFF" stop-opacity=".1"/></linearGradient>
+    <linearGradient id="skyFade" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#4B5BFF" stop-opacity=".6"/><stop offset="1" stop-color="#3DDBD9" stop-opacity=".05"/></linearGradient>
+    <linearGradient id="rainbow"><stop stop-color="#FF4D6D"/><stop offset=".17" stop-color="#FFB703"/><stop offset=".34" stop-color="#F8F871"/><stop offset=".51" stop-color="#3DDBD9"/><stop offset=".68" stop-color="#4B5BFF"/><stop offset=".84" stop-color="#7857FF"/><stop offset="1" stop-color="#B78BFA"/></linearGradient>
+    <filter id="glow"><feGaussianBlur stdDeviation="12" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <g id="art-sol" opacity="0">
+    <circle cx="540" cy="1130" r="270" fill="url(#sunGlow)"/>
+    <g stroke="#FFB703" stroke-width="10" stroke-linecap="round" opacity=".9">
+      <path d="M540 770V830 M540 1430V1490 M180 1130H240 M840 1130H900 M286 876L330 920 M750 1345L794 1389 M286 1389L330 1345 M750 920L794 876"/>
+    </g>
+    <circle cx="540" cy="1130" r="155" fill="#FFF7D6" stroke="#FFB703" stroke-width="10" filter="url(#glow)"/>
+    <path d="M310 1350L770 910" stroke="url(#whiteBeam)" stroke-width="24" opacity=".45"/>
+    <path d="M205 1440L440 1205 M640 1050L870 820" stroke="#FFFFFF" stroke-width="4" stroke-dasharray="12 20" opacity=".45"/>
+  </g>
+  <g id="art-espectro" opacity="0">
+    <path d="M125 1085H365" stroke="#FFFFFF" stroke-width="18" stroke-linecap="round" opacity=".9"/>
+    <path d="M365 1085L445 1085" stroke="url(#whiteBeam)" stroke-width="22"/>
+    <rect x="445" y="1008" width="500" height="154" rx="30" fill="#142744" stroke="#3DDBD9" stroke-width="5"/>
+    <rect x="470" y="1034" width="450" height="102" rx="12" fill="url(#rainbow)" filter="url(#glow)"/>
+    <path d="M500 1270Q585 1160 670 1270T840 1270" fill="none" stroke="#FF4D6D" stroke-width="10" stroke-linecap="round"/>
+    <path d="M500 1390Q530 1300 560 1390T620 1390T680 1390T740 1390T800 1390T860 1390" fill="none" stroke="#4B5BFF" stroke-width="10" stroke-linecap="round"/>
+    <path d="M490 1270H870 M490 1390H870" stroke="#FFFFFF" stroke-width="2" stroke-dasharray="7 15" opacity=".25"/>
+    <circle cx="490" cy="1270" r="11" fill="#FFB703"/><circle cx="870" cy="1270" r="11" fill="#FFB703"/>
+  </g>
+  <g id="art-atmosfera" opacity="0">
+    <path d="M135 1325Q540 780 945 1325" fill="none" stroke="#3DDBD9" stroke-width="12" opacity=".9"/>
+    <path d="M190 1355Q540 900 890 1355" fill="none" stroke="#4B5BFF" stroke-width="5" stroke-dasharray="15 18" opacity=".7"/>
+    <circle cx="540" cy="1360" r="185" fill="#1A3153" stroke="#4B5BFF" stroke-width="8"/>
+    <path d="M380 1390Q540 1510 700 1390" fill="none" stroke="#3DDBD9" stroke-width="7" opacity=".65"/>
+    <g fill="#FFB703" stroke="#FFF7D6" stroke-width="4">
+      <circle cx="320" cy="1135" r="24"/><circle cx="440" cy="1000" r="24"/><circle cx="640" cy="1055" r="24"/><circle cx="760" cy="1185" r="24"/><circle cx="450" cy="1265" r="24"/><circle cx="650" cy="1350" r="24"/>
+    </g>
+    <g fill="none" stroke="#3DDBD9" stroke-width="6" opacity=".8">
+      <circle cx="320" cy="1135" r="40"/><circle cx="440" cy="1000" r="40"/><circle cx="640" cy="1055" r="40"/><circle cx="760" cy="1185" r="40"/><circle cx="450" cy="1265" r="40"/><circle cx="650" cy="1350" r="40"/>
+    </g>
+  </g>
+  <g id="art-rayleigh" opacity="0">
+    <circle cx="160" cy="1190" r="75" fill="url(#sunGlow)"/>
+    <circle cx="160" cy="1190" r="40" fill="#FFF7D6" stroke="#FFB703" stroke-width="6"/>
+    <path d="M205 1190H500" stroke="#FFFFFF" stroke-width="10" stroke-linecap="round"/>
+    <g fill="#FFB703" stroke="#FFF7D6" stroke-width="3">
+      <circle cx="520" cy="1190" r="15"/><circle cx="610" cy="1050" r="15"/><circle cx="680" cy="1295" r="15"/><circle cx="760" cy="1100" r="15"/><circle cx="820" cy="1320" r="15"/>
+    </g>
+    <g stroke="#4B5BFF" stroke-width="9" stroke-linecap="round" filter="url(#glow)">
+      <path d="M520 1190L620 1000"/><path d="M520 1190L750 940"/><path d="M520 1190L835 1190"/><path d="M520 1190L760 1395"/><path d="M520 1190L605 1435"/>
+    </g>
+    <g stroke="#FF4D6D" stroke-width="8" stroke-linecap="round" opacity=".9">
+      <path d="M205 1190L965 1190"/>
+      <path d="M690 1190l36 -18 M690 1190l36 18"/>
+    </g>
+  </g>
+  <g id="art-ojos" opacity="0">
+    <path d="M175 1160Q295 1040 415 1160Q295 1280 175 1160Z" fill="#142744" stroke="#FFFFFF" stroke-width="9"/>
+    <circle cx="295" cy="1160" r="55" fill="#4B5BFF" stroke="#3DDBD9" stroke-width="8"/>
+    <circle cx="295" cy="1160" r="25" fill="#0F1B2D"/>
+    <circle cx="312" cy="1140" r="10" fill="#FFFFFF"/>
+    <path d="M570 1160Q690 1040 810 1160Q690 1280 570 1160Z" fill="#142744" stroke="#FFFFFF" stroke-width="9"/>
+    <circle cx="690" cy="1160" r="55" fill="#B78BFA" stroke="#FFB703" stroke-width="8"/>
+    <circle cx="690" cy="1160" r="25" fill="#0F1B2D"/>
+    <circle cx="707" cy="1140" r="10" fill="#FFFFFF"/>
+    <g stroke-width="12" stroke-linecap="round"><path d="M215 1350H375" stroke="#4B5BFF"/><path d="M610 1350H770" stroke="#B78BFA"/></g>
+    <path d="M420 1350H570" stroke="#3DDBD9" stroke-width="5" stroke-dasharray="10 12"/>
+    <path d="M470 1325l26 25 -26 25" fill="none" stroke="#3DDBD9" stroke-width="7"/>
+  </g>
+  <g id="art-horizonte" opacity="0">
+    <path d="M80 1330Q540 1195 1000 1330V1590H80Z" fill="url(#skyFade)"/>
+    <path d="M60 1350Q540 1215 1020 1350" fill="none" stroke="#3DDBD9" stroke-width="8" opacity=".85"/>
+    <path d="M90 1400Q540 1280 990 1400" fill="none" stroke="#4B5BFF" stroke-width="5" stroke-dasharray="15 17" opacity=".7"/>
+    <circle cx="790" cy="1215" r="118" fill="url(#sunGlow)"/>
+    <circle cx="790" cy="1215" r="62" fill="#FFB703" stroke="#FFF7D6" stroke-width="7"/>
+    <path d="M120 1460Q540 1375 960 1460" fill="none" stroke="#FFFFFF" stroke-width="4" opacity=".55"/>
+    <path d="M160 1510H920" stroke="#FFFFFF" stroke-width="3" stroke-dasharray="5 18" opacity=".35"/>
+  </g>
+</svg>
