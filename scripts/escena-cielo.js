@@ -1,6 +1,6 @@
 // Ilustración SVG 2D sincronizada con el tiempo de Hyperframes.
 const ESC = /*ESCENAS*/[];
-const tl = gsap.timeline({ paused: true });
+const tl = window.__timelines?.["main"] || gsap.timeline({ paused: true });
 ESC.forEach((e) => {
   const el = document.querySelector("#art-" + e.v);
   if (!el) throw new Error("Falta la ilustración SVG para: " + e.v);
