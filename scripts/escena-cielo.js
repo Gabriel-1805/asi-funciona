@@ -15,7 +15,7 @@ ESC.forEach((e) => {
   );
 });
 window.__timelines = window.__timelines || {};
-window.__timelines["sky-art"] = tl;
+window.__timelines["main"] = tl;
 const lastTime = ESC.length ? ESC[ESC.length - 1].start + ESC[ESC.length - 1].dur : 0;
 function renderAt(t) {
   const clamped = Math.max(0, Math.min(lastTime, Number(t) || 0));
