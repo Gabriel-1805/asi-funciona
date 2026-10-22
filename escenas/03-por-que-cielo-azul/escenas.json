@@ -1,0 +1,113 @@
+{
+  "id": "03-por-que-cielo-azul",
+  "voz": {
+    "motor": "edge",
+    "voz": "es-MX-JorgeNeural",
+    "rate": "-3%",
+    "pitch": "-8Hz",
+    "respaldo": {
+      "motor": "kokoro",
+      "id": "ef_dora",
+      "idioma": "es",
+      "velocidad": 1
+    }
+  },
+  "escenas": [
+    {
+      "visual": "sol",
+      "voz": "La luz del Sol parece blanca. Entonces, ¿por qué el cielo no se ve blanco?",
+      "frases": [
+        "La luz del",
+        "Sol parece",
+        "*blanca*.",
+        "Entonces, ¿por",
+        "qué el cielo",
+        "no se ve",
+        "*blanco*?"
+      ]
+    },
+    {
+      "visual": "espectro",
+      "voz": "La luz blanca mezcla todos los colores visibles. Cada color tiene su propia longitud de onda: la roja es larga y la azul, corta.",
+      "frases": [
+        "La luz blanca",
+        "mezcla todos los",
+        "colores visibles.",
+        "Cada color tiene",
+        "su propia longitud",
+        "de onda: la",
+        "roja es *larga*",
+        "y la azul,",
+        "*corta*."
+      ]
+    },
+    {
+      "visual": "atmosfera",
+      "voz": "Al entrar en la atmósfera, la luz encuentra moléculas diminutas de nitrógeno y oxígeno. Estas la dispersan en muchas direcciones.",
+      "frases": [
+        "Al entrar en",
+        "la atmósfera,",
+        "la luz encuentra",
+        "moléculas diminutas",
+        "de nitrógeno y",
+        "oxígeno.",
+        "Estas la dispersan",
+        "en muchas",
+        "direcciones."
+      ]
+    },
+    {
+      "visual": "rayleigh",
+      "voz": "Este fenómeno se llama dispersión de Rayleigh. Las ondas cortas, azules y violetas, se dispersan mucho más que las rojas.",
+      "frases": [
+        "Este fenómeno",
+        "se llama",
+        "dispersión de",
+        "*Rayleigh*.",
+        "Las ondas cortas,",
+        "azules y violetas,",
+        "se dispersan",
+        "mucho más",
+        "que las rojas."
+      ]
+    },
+    {
+      "visual": "ojos",
+      "voz": "¿Por qué no vemos el cielo violeta? Nuestros ojos son más sensibles al azul, y el Sol emite más luz azul que violeta.",
+      "frases": [
+        "¿Por qué no",
+        "vemos el cielo",
+        "*violeta*?",
+        "Nuestros ojos",
+        "son más sensibles",
+        "al azul,",
+        "y el Sol",
+        "emite más luz",
+        "azul que violeta."
+      ]
+    },
+    {
+      "visual": "horizonte",
+      "voz": "Cerca del horizonte, la luz atraviesa más atmósfera y el azul se dispersa varias veces, por eso el cielo se ve más pálido. No es un filtro: son moléculas desviando luz. ¿Qué otra curiosidad quieres que expliquemos?",
+      "frases": [
+        "Cerca del",
+        "*horizonte*,",
+        "la luz atraviesa",
+        "más atmósfera",
+        "y el azul",
+        "se dispersa",
+        "varias veces,",
+        "por eso el",
+        "cielo se ve",
+        "más pálido.",
+        "No es un",
+        "*filtro*:",
+        "son moléculas",
+        "desviando luz.",
+        "¿Qué otra",
+        "curiosidad quieres",
+        "que expliquemos?"
+      ]
+    }
+  ]
+}
